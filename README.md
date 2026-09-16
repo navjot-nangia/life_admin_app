@@ -72,6 +72,14 @@ The test runner transpiles the actual domain and HTTP route modules into ignored
 
 The complete source is in the Site repository; the downloadable source archive contains the app, schema/migration, tests, scripts, this guide and `.env.example`. It omits dependencies, local runtime state, credentials, Git internals and compiled build output.
 
+## Railway deployment
+
+The repository also includes a Railway-specific runtime. Railway builds the same Vinext application, starts its Cloudflare-compatible worker on a private loopback port, and exposes it through a small authenticated gateway. The gateway strips all caller-supplied identity headers and injects one configured owner identity only after HTTP Basic authentication.
+
+Set `LIFE_ADMIN_USERNAME`, `LIFE_ADMIN_PASSWORD`, `LIFE_ADMIN_EMAIL`, and optionally `LIFE_ADMIN_NAME` in Railway. Attach a persistent volume and mount it at `/data`; Railway then supplies `RAILWAY_VOLUME_MOUNT_PATH`, and both the local D1 database and private document objects survive deployments. Without a volume, data is ephemeral. Do not expose the internal worker port or remove the gateway.
+
+Railway uses `railway.json` to run `pnpm build` and `pnpm start:railway`. The Railway schema is applied idempotently at startup. The Sites deployment remains unchanged and continues to use managed D1, R2, and ChatGPT identity.
+
 ## Enable AI extraction
 
 Set server-side `AI_API_KEY` to an Anthropic API key and `AI_MODEL` to a currently available image/PDF-capable model in that account. Configure these values through Sites secrets, then reload Settings. The adapter uses Anthropic’s Messages endpoint with base64 `image`/`document` content and validates returned JSON through Zod. `ExtractionProvider` in `lib/life/ai.ts` is the replaceable provider contract.
