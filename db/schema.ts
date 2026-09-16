@@ -1,0 +1,9 @@
+import { sqliteTable, text, integer, index, uniqueIndex } from 'drizzle-orm/sqlite-core';
+export const profiles = sqliteTable('profiles', { user: text('user').primaryKey(), data: text('data').notNull() });
+export const items = sqliteTable('items', { id: text('id').primaryKey(), user: text('user').notNull(), data: text('data').notNull(), version: integer('version').notNull().default(0) }, t => [index('items_user').on(t.user)]);
+export const history = sqliteTable('history', { id: text('id').primaryKey(), user: text('user').notNull(), item: text('item').notNull(), cycle: integer('cycle').notNull(), data: text('data').notNull() }, t => [index('history_user').on(t.user), uniqueIndex('history_cycle').on(t.item, t.cycle)]);
+export const documents = sqliteTable('documents', { id: text('id').primaryKey(), user: text('user').notNull(), item: text('item').notNull().default(''), name: text('name').notNull(), type: text('type').notNull(), size: integer('size').notNull(), created: text('created').notNull() }, t => [index('documents_user').on(t.user)]);
+export const notifications = sqliteTable('notifications', { id: text('id').primaryKey(), user: text('user').notNull(), item: text('item').notNull(), data: text('data').notNull(), read: integer('read').notNull().default(0), pushed: integer('pushed').notNull().default(0) }, t => [index('notifications_user').on(t.user)]);
+export const dismissals = sqliteTable('dismissals', { id: text('id').primaryKey(), user: text('user').notNull(), data: text('data').notNull() }, t => [index('dismissals_user').on(t.user)]);
+export const subscriptions = sqliteTable('subscriptions', { id: text('id').primaryKey(), user: text('user').notNull(), data: text('data').notNull() }, t => [index('subscriptions_user').on(t.user)]);
+export const system = sqliteTable('system', { id: text('id').primaryKey(), value: text('value').notNull() });

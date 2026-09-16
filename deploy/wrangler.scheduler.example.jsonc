@@ -1,0 +1,8 @@
+{
+  "name": "life-admin-reminders",
+  "main": "scheduler-worker.ts",
+  "compatibility_date": "2026-05-15",
+  "compatibility_flags": ["nodejs_compat"],
+  "triggers": {"crons": ["*/15 * * * *"]},
+  "d1_databases": [{"binding": "DB", "database_name": "life-admin", "database_id": "REPLACE_WITH_DATABASE_ID"}]
+}
