@@ -78,7 +78,7 @@ The repository also includes a Railway-specific runtime. Railway builds the same
 
 Set `LIFE_ADMIN_USERNAME`, `LIFE_ADMIN_PASSWORD`, `LIFE_ADMIN_EMAIL`, and optionally `LIFE_ADMIN_NAME` in Railway. Attach a persistent volume and mount it at `/data`; Railway then supplies `RAILWAY_VOLUME_MOUNT_PATH`, and both the local D1 database and private document objects survive deployments. Without a volume, data is ephemeral. Do not expose the internal worker port or remove the gateway.
 
-Railway uses `railway.json` to run `pnpm build` and `pnpm start:railway`. The Railway schema is applied idempotently at startup. The Sites deployment remains unchanged and continues to use managed D1, R2, and ChatGPT identity.
+Railway uses `railway.json` and the default `pnpm start` script to launch the private gateway. The Railway schema is applied idempotently at startup. For a direct local Worker preview, use `pnpm start:worker-local`. The Sites deployment remains unchanged and continues to use managed D1, R2, and ChatGPT identity.
 
 ## Enable AI extraction
 
