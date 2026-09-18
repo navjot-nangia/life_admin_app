@@ -74,9 +74,9 @@ The complete source is in the Site repository; the downloadable source archive c
 
 ## Railway deployment
 
-The repository also includes a Railway-specific runtime. Railway builds the same Vinext application, starts its Cloudflare-compatible worker on a private loopback port, and exposes it through a small authenticated gateway. The gateway strips all caller-supplied identity headers and injects one configured owner identity only after HTTP Basic authentication.
+The repository also includes a Railway-specific runtime. Railway builds the same Vinext application, starts its Cloudflare-compatible worker on a private loopback port, and exposes it through a small gateway. The gateway strips all caller-supplied identity headers and injects one configured testing identity. The current testing deployment is public, so everyone who opens the URL shares that workspace.
 
-Set `LIFE_ADMIN_USERNAME`, `LIFE_ADMIN_PASSWORD`, `LIFE_ADMIN_EMAIL`, and optionally `LIFE_ADMIN_NAME` in Railway. Attach a persistent volume and mount it at `/data`; Railway then supplies `RAILWAY_VOLUME_MOUNT_PATH`, and both the local D1 database and private document objects survive deployments. Without a volume, data is ephemeral. Do not expose the internal worker port or remove the gateway.
+Set `LIFE_ADMIN_EMAIL` and optionally `LIFE_ADMIN_NAME` in Railway. To restore browser password protection, set `LIFE_ADMIN_PUBLIC=false` together with `LIFE_ADMIN_USERNAME` and `LIFE_ADMIN_PASSWORD`. Attach a persistent volume and mount it at `/data`; Railway then supplies `RAILWAY_VOLUME_MOUNT_PATH`, and both the local D1 database and private document objects survive deployments. Without a volume, data is ephemeral. Do not expose the internal worker port or remove the gateway.
 
 Railway uses `railway.json` and the default `pnpm start` script to launch the private gateway. The Railway schema is applied idempotently at startup. For a direct local Worker preview, use `pnpm start:worker-local`. The Sites deployment remains unchanged and continues to use managed D1, R2, and ChatGPT identity.
 
