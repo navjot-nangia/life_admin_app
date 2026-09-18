@@ -16,9 +16,14 @@ const username = process.env.LIFE_ADMIN_USERNAME || "";
 const password = process.env.LIFE_ADMIN_PASSWORD || "";
 const email = process.env.LIFE_ADMIN_EMAIL || "";
 const fullName = process.env.LIFE_ADMIN_NAME || "Life Admin";
+const publicAccess = process.env.LIFE_ADMIN_PUBLIC !== "false";
 
-if (!username || !password || !email) {
-  console.error("LIFE_ADMIN_USERNAME, LIFE_ADMIN_PASSWORD, and LIFE_ADMIN_EMAIL are required.");
+if (!email) {
+  console.error("LIFE_ADMIN_EMAIL is required.");
+  process.exit(1);
+}
+if (!publicAccess && (!username || !password)) {
+  console.error("LIFE_ADMIN_USERNAME and LIFE_ADMIN_PASSWORD are required when LIFE_ADMIN_PUBLIC=false.");
   process.exit(1);
 }
 if (!Number.isInteger(publicPort) || publicPort < 1 || publicPort > 65535) {
@@ -73,7 +78,7 @@ const server = createServer((request, response) => {
     response.end("ok");
     return;
   }
-  if (!authorized(request.headers.authorization)) {
+  if (!publicAccess && !authorized(request.headers.authorization)) {
     deny(response);
     return;
   }
